@@ -1,5 +1,6 @@
 package Test;
 
+import Main.Stack;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,90 +10,109 @@ import static org.junit.Assert.*;
 
 
 public class StackTest {
+
     private Stack stack;
 
+    /**
+     * Sets up a new Stack instance before each test.
+     */
     @Before
     public void setUp() {
-        stack = new Stack(5);  // Stack mit Größe 5 für die Tests
+        stack = new Stack(5); // Stack with a size of 5 for testing
     }
 
+    /**
+     * Tests if the stack is empty when initialized and not empty after pushing an element.
+     */
     @Test
     public void testIsEmpty() {
-        assertTrue(stack.isEmpty());  // Stack ist anfangs leer
+        assertTrue("Stack should be empty initially", stack.isEmpty());
         stack.push(1);
-        assertFalse(stack.isEmpty()); // Nach Push sollte der Stack nicht leer sein
+        assertFalse("Stack should not be empty after pushing an element", stack.isEmpty());
     }
 
+    /**
+     * Tests the push method for correct behavior, including exceptions for full stack and negative values.
+     */
     @Test
     public void testPush() {
         stack.push(10);
-        Assert.assertEquals(1, stack.size());  // Nach dem Push sollte die Größe 1 sein
+        assertEquals("Stack size should be 1 after one push", 1, stack.size());
 
         stack.push(20);
-        Assert.assertEquals(2, stack.size());  // Nach einem zweiten Push sollte die Größe 2 sein
+        assertEquals("Stack size should be 2 after two pushes", 2, stack.size());
 
-        // Teste StackOverflowError, wenn der Stack voll ist
+        // Fill the stack completely
         stack.push(30);
         stack.push(40);
-        stack.push(50); // Jetzt ist der Stack voll
+        stack.push(50); // Stack is now full
 
+        // Test StackOverflowError when pushing into a full stack
         try {
-            stack.push(60);  // Dieser Push sollte eine Ausnahme werfen
-            fail("StackOverflowError erwartet");
+            stack.push(60);
+            fail("Expected StackOverflowError when pushing into a full stack");
         } catch (StackOverflowError e) {
-            // Erwarteter Fehler, Test bestanden
+            // Expected exception, test passed
         }
 
-        // Teste IllegalArgumentException für negative Werte
+        // Test IllegalArgumentException for negative values
         try {
             stack.push(-1);
-            fail("IllegalArgumentException erwartet");
+            fail("Expected IllegalArgumentException when pushing a negative value");
         } catch (IllegalArgumentException e) {
-            // Erwarteter Fehler, Test bestanden
+            // Expected exception, test passed
         }
     }
 
+    /**
+     * Tests the pop method for correct behavior, including popping from an empty stack.
+     */
     @Test
     public void testPop() {
-        Assert.assertEquals(-1, stack.pop());  // Leerer Stack sollte -1 zurückgeben
+        assertEquals("Popping from an empty stack should return -1", -1, stack.pop());
 
         stack.push(10);
         stack.push(20);
 
-        Assert.assertEquals(20, stack.pop());  // LIFO-Prinzip: zuletzt hinzugefügt, zuerst entfernt
-        Assert.assertEquals(10, stack.pop());  // Das verbleibende Element
-        Assert.assertEquals(-1, stack.pop());  // Wieder leerer Stack
+        assertEquals("Popping should return the last pushed element (LIFO)", 20, stack.pop());
+        assertEquals("Popping should return the next element", 10, stack.pop());
+        assertEquals("Popping from an empty stack should return -1 again", -1, stack.pop());
     }
 
+    /**
+     * Tests the size method for correct size tracking.
+     */
     @Test
     public void testSize() {
-        Assert.assertEquals(0, stack.size());  // Anfänglich leerer Stack
+        assertEquals("Initial stack size should be 0", 0, stack.size());
 
         stack.push(10);
-        Assert.assertEquals(1, stack.size());  // Nach einem Push
+        assertEquals("Stack size should be 1 after one push", 1, stack.size());
 
         stack.push(20);
-        Assert.assertEquals(2, stack.size());  // Nach zwei Push-Operationen
+        assertEquals("Stack size should be 2 after two pushes", 2, stack.size());
 
         stack.pop();
-        Assert.assertEquals(1, stack.size());  // Nach einem Pop sollte die Größe wieder 1 sein
+        assertEquals("Stack size should be 1 after one pop", 1, stack.size());
 
         stack.pop();
-        Assert.assertEquals(0, stack.size());  // Nach einem weiteren Pop sollte der Stack leer sein
+        assertEquals("Stack size should be 0 after popping all elements", 0, stack.size());
     }
 
+    /**
+     * Tests the top method for correct behavior, including checking the top element in various scenarios.
+     */
     @Test
     public void testTop() {
-        assertEquals(-1, stack.top());  // Leerer Stack sollte -1 zurückgeben
+        assertEquals("Top of an empty stack should be -1", -1, stack.top());
 
         stack.push(10);
-        assertEquals(10, stack.top());  // Oberstes Element nach Push von 10
+        assertEquals("Top should be 10 after pushing 10", 10, stack.top());
 
         stack.push(20);
-        assertEquals(20, stack.top());  // Oberstes Element nach Push von 20
+        assertEquals("Top should be 20 after pushing 20", 20, stack.top());
 
         stack.pop();
-        assertEquals(10, stack.top());  // Nach Pop sollte das nächste Element oben sein
+        assertEquals("Top should be 10 after popping 20", 10, stack.top());
     }
-
 }
