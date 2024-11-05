@@ -1,0 +1,8 @@
+version = 1
+SPDX-PackageName = "Metrics Project"
+
+[[annotations]]
+path = "**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2024 Steffen Niesmann"
+SPDX-License-Identifier = "CC-BY-SA-4.0"
